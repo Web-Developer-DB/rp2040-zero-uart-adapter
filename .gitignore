@@ -1,0 +1,18 @@
+# Build and generated firmware
+/build/
+/firmware/*.uf2
+/firmware/*.elf
+/firmware/*.bin
+/firmware/*.hex
+
+# Private captures and device-specific analysis
+# UART logs may contain credentials, serial numbers, MAC addresses, or other
+# information that must not be published with this project.
+/captures/
+/docs/d95-linux-porting-profile.md
+/docs/private/
+
+# CircuitPython editor and operating-system files
+.DS_Store
+*.pyc
+__pycache__/
