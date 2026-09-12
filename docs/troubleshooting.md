@@ -15,6 +15,50 @@ Die C++-Firmware soll zwei Interfaces mit den Namen `Debug console` und
 im Wurzelverzeichnis von `CIRCUITPY` liegen; `boot.py` wird nur beim Start
 ausgeführt. Nach Änderungen an `boot.py` deshalb neu starten oder USB trennen.
 
+## Ubuntu: `Permission denied` beim Öffnen von `/dev/ttyACM*`
+
+Ubuntu weist USB-Seriellgeräte üblicherweise der Gruppe `dialout` zu. Deshalb
+einmalig das eigene Konto hinzufügen:
+
+```sh
+sudo usermod -aG dialout "$USER"
+```
+
+Danach vollständig ab- und wieder anmelden oder den Rechner neu starten. Ein
+neu geöffnetes Terminal allein reicht nicht aus. Mit diesem Befehl prüfen, ob
+die neue Sitzung die Gruppe kennt:
+
+```sh
+groups
+```
+
+`dialout` muss in der Ausgabe stehen. Danach kann der Recorder ohne `sudo`
+gestartet werden. Für eine sofortige einzelne Aufnahme ist auch ein
+`sudo python3 tools/capture_uart.py ...` möglich: Der Recorder übergibt die
+neu erzeugten `.raw`- und `.log`-Dateien danach automatisch wieder an den
+Desktop-Nutzer, der `sudo` aufgerufen hat.
+
+Falls eine alte Aufzeichnung aus einer früheren Programmversion durch einen
+`sudo`-Aufruf root-eigen ist, lasse ihre Eigentümerschaft nicht unbesehen
+rekursiv ändern. Verschiebe oder sichere die betreffende Datei gezielt und
+prüfe sie vor dem weiteren Teilen.
+
+## Richtigen CircuitPython-Port auswählen
+
+CircuitPython stellt eine REPL-Konsole und eine Daten-Schnittstelle bereit.
+Für die Aufzeichnung ist ausschließlich die Daten-Schnittstelle vorgesehen.
+Nach Einstecken oder Neustart helfen diese Befehle beim Erkennen der Ports:
+
+```sh
+ls -l /dev/serial/by-id/
+dmesg | tail -n 30
+```
+
+Die Nummern `ttyACM0` und `ttyACM1` können sich auf anderen Rechnern oder nach
+einem Neustart ändern. Daher möglichst den passenden Namen unter
+`/dev/serial/by-id/` verwenden und nicht dauerhaft eine feste `ttyACM`-Nummer
+in Skripten speichern.
+
 ## Die REPL ist nicht erreichbar
 
 Nur CircuitPython besitzt eine REPL. Verbinde dich mit dem Port

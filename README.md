@@ -115,11 +115,38 @@ and a readable rendering with timestamps. The current local date and time,
 including seconds, are appended automatically to every filename, so earlier
 captures are not overwritten. Start it first, then power-cycle the target:
 
+### Ubuntu / Linux: quick start and permanent access
+
+If the port reports `Permission denied`, the quickest copy-and-paste option is:
+
+~~~sh
+sudo python3 tools/capture_uart.py /dev/serial/by-id/<your-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
+~~~
+
+When started with `sudo`, the script automatically returns ownership of the
+created `.raw` and `.log` files to the desktop user who invoked `sudo`.
+
+For permanent access without `sudo`, Ubuntu users can add their account to the
+USB-serial `dialout` group once. **Log out and log in again** before using the
+normal command:
+
+~~~sh
+sudo usermod -aG dialout "$USER"
+groups                 # `dialout` must appear after the new login
+ls -l /dev/serial/by-id/
+~~~
+
+Select the **data** interface of the CircuitPython board, not the REPL
+console. The `sudo` command works immediately; the group setup is more
+convenient for regular use. See [the detailed troubleshooting guide](docs/troubleshooting.md)
+for port checks.
+
 ~~~sh
 python3 tools/capture_uart.py /dev/serial/by-id/<your-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
 ~~~
 
-Stop with <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+Stop with <kbd>Ctrl</kbd>+<kbd>C</kbd>. This ends the recorder cleanly and
+saves both files; it does **not** discard the recording.
 
 | File | Contents |
 | --- | --- |
@@ -281,11 +308,42 @@ automatisch das lokale Datum und die Uhrzeit einschließlich Sekunden angehängt
 dadurch werden frühere Aufzeichnungen nicht überschrieben. Erst die
 Aufzeichnung starten, danach das Zielgerät einschalten oder neu starten:
 
+### Ubuntu / Linux: Schnellstart und dauerhafte Freigabe
+
+Bei der Meldung `Permission denied` funktioniert diese direkt kopierbare
+Variante sofort:
+
+~~~sh
+sudo python3 tools/capture_uart.py /dev/serial/by-id/<dein-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
+~~~
+
+Wenn der Recorder mit `sudo` gestartet wird, gibt er die neu erzeugten Dateien
+`.raw` und `.log` automatisch an den Desktop-Nutzer zurück, der `sudo`
+aufgerufen hat.
+
+Für die dauerhafte Nutzung ohne `sudo` kann das eigene Konto unter Ubuntu
+einmalig zur USB-Seriellgruppe `dialout` hinzugefügt werden. Danach
+**vollständig ab- und wieder anmelden**, bevor der normale Befehl verwendet
+wird:
+
+~~~sh
+sudo usermod -aG dialout "$USER"
+groups                 # Nach der neuen Anmeldung muss `dialout` erscheinen.
+ls -l /dev/serial/by-id/
+~~~
+
+Die **Daten-Schnittstelle** des CircuitPython-Boards wählen, nicht die
+REPL-Konsole. Der `sudo`-Befehl funktioniert sofort; die Gruppen-Einrichtung
+ist für regelmäßige Nutzung bequemer. Weitere Port-Prüfungen stehen in der
+ausführlichen [Fehlerhilfe](docs/troubleshooting.md).
+
 ~~~sh
 python3 tools/capture_uart.py /dev/serial/by-id/<dein-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
 ~~~
 
-Mit <kbd>Ctrl</kbd>+<kbd>C</kbd> wird die Aufzeichnung beendet.
+Mit <kbd>Ctrl</kbd>+<kbd>C</kbd> wird die Aufzeichnung sauber beendet und
+beide Dateien werden gespeichert; die bisherige Aufnahme geht **nicht**
+verloren.
 
 | Datei | Inhalt |
 | --- | --- |
