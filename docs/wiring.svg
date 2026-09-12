@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-labelledby="title description">
+  <title id="title">Verdrahtung: Waveshare RP2040-Zero als USB-UART-Adapter</title>
+  <desc id="description">Technische Oberseitenansicht des RP2040-Zero. GP0 als UART-TX wird mit RX des Zielgeräts verbunden, GP1 als UART-RX mit TX und GND mit GND.</desc>
+  <style>
+    text { font-family: Inter, ui-sans-serif, system-ui, sans-serif; fill: #172033; }
+    .title { font-size: 29px; font-weight: 750; }
+    .subtitle { font-size: 17px; fill: #536176; }
+    .label { font-size: 16px; font-weight: 650; }
+    .small { font-size: 14px; fill: #536176; }
+    .tiny { font-size: 12px; fill: #536176; }
+    .board { fill: #126e59; stroke: #064638; stroke-width: 4; }
+    .silk { fill: #d6fae7; font-size: 14px; font-weight: 700; }
+    .chip { fill: #182235; stroke: #0a1120; stroke-width: 2; }
+    .metal { fill: #ced6df; stroke: #758194; stroke-width: 2; }
+    .pad { fill: #d9aa46; stroke: #805d19; stroke-width: 1.5; }
+    .pin-text { font-size: 13px; font-weight: 700; fill: #1c2637; }
+    .focus { fill: #fff1bc; stroke: #d88900; stroke-width: 3; }
+    .focus-text { font-size: 14px; font-weight: 800; fill: #704100; }
+    .target { fill: #f5f7fb; stroke: #7a8798; stroke-width: 3; }
+    .target-title { font-size: 22px; font-weight: 750; }
+    .wire { fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .callout { fill: #ffffff; stroke: #b9c5d4; stroke-width: 2; rx: 10; }
+  </style>
+
+  <rect width="1200" height="780" fill="#ffffff"/>
+  <text x="600" y="48" text-anchor="middle" class="title">RP2040-Zero als USB-UART-Adapter</text>
+  <text x="600" y="78" text-anchor="middle" class="subtitle">Oberseitenansicht · USB-C oben · 3,3-V-TTL · Standard: 115200 Baud, 8N1</text>
+
+  <!-- RP2040-Zero board, drawn from the official pinout and schematic. -->
+  <rect x="175" y="130" width="365" height="510" rx="22" class="board"/>
+  <text x="357" y="607" text-anchor="middle" class="silk">WAVESHARE · RP2040-ZERO</text>
+
+  <!-- USB-C connector -->
+  <rect x="294" y="108" width="126" height="52" rx="10" class="metal"/>
+  <rect x="311" y="119" width="92" height="30" rx="7" fill="#4d5868"/>
+  <text x="357" y="178" text-anchor="middle" class="silk">USB-C zum Computer</text>
+
+  <!-- Major components to make this a recognisable board view. -->
+  <rect x="283" y="262" width="148" height="150" rx="8" class="chip"/>
+  <text x="357" y="338" text-anchor="middle" fill="#eef4ff" font-size="22" font-weight="700">RP2040</text>
+  <rect x="225" y="450" width="84" height="54" rx="5" class="chip"/>
+  <text x="267" y="482" text-anchor="middle" fill="#eef4ff" font-size="12">FLASH</text>
+  <rect x="392" y="450" width="76" height="40" rx="5" fill="#1b293d"/>
+  <text x="430" y="475" text-anchor="middle" fill="#eef4ff" font-size="11">BOOT</text>
+  <circle cx="462" cy="540" r="15" fill="#32a6ff" stroke="#d5f0ff" stroke-width="3"/>
+  <text x="462" y="571" text-anchor="middle" class="tiny" fill="#d6fae7">RGB LED</text>
+  <text x="462" y="587" text-anchor="middle" class="tiny" fill="#d6fae7">GP16</text>
+
+  <!-- Left edge pads, from top to bottom. -->
+  <text x="191" y="202" class="silk">Linke Kante</text>
+  <g>
+    <rect x="162" y="217" width="35" height="24" rx="4" class="pad"/><text x="202" y="234" class="pin-text">VBUS</text>
+    <rect x="162" y="249" width="35" height="24" rx="4" class="focus"/><text x="202" y="267" class="focus-text">GND</text>
+    <rect x="162" y="281" width="35" height="24" rx="4" class="pad"/><text x="202" y="299" class="pin-text">3V3</text>
+    <rect x="162" y="313" width="35" height="24" rx="4" class="pad"/><text x="202" y="331" class="pin-text">GP29</text>
+    <rect x="162" y="345" width="35" height="24" rx="4" class="pad"/><text x="202" y="363" class="pin-text">GP28</text>
+    <rect x="162" y="377" width="35" height="24" rx="4" class="pad"/><text x="202" y="395" class="pin-text">GP27</text>
+    <rect x="162" y="409" width="35" height="24" rx="4" class="pad"/><text x="202" y="427" class="pin-text">GP26</text>
+    <rect x="162" y="441" width="35" height="24" rx="4" class="pad"/><text x="202" y="459" class="pin-text">GP15</text>
+    <rect x="162" y="473" width="35" height="24" rx="4" class="pad"/><text x="202" y="491" class="pin-text">GP14</text>
+    <rect x="162" y="505" width="35" height="24" rx="4" class="pad"/><text x="202" y="523" class="pin-text">GP13</text>
+    <rect x="162" y="537" width="35" height="24" rx="4" class="pad"/><text x="202" y="555" class="pin-text">GP12</text>
+  </g>
+
+  <!-- Right edge pads. GP0 and GP1 are intentionally highlighted. -->
+  <text x="436" y="202" class="silk">Rechte Kante</text>
+  <g>
+    <rect x="518" y="217" width="35" height="24" rx="4" class="focus"/><text x="500" y="235" text-anchor="end" class="focus-text">GP0 · UART0 TX</text>
+    <rect x="518" y="249" width="35" height="24" rx="4" class="focus"/><text x="500" y="267" text-anchor="end" class="focus-text">GP1 · UART0 RX</text>
+    <rect x="518" y="281" width="35" height="24" rx="4" class="pad"/><text x="500" y="299" text-anchor="end" class="pin-text">GP2</text>
+    <rect x="518" y="313" width="35" height="24" rx="4" class="pad"/><text x="500" y="331" text-anchor="end" class="pin-text">GP3</text>
+    <rect x="518" y="345" width="35" height="24" rx="4" class="pad"/><text x="500" y="363" text-anchor="end" class="pin-text">GP4</text>
+    <rect x="518" y="377" width="35" height="24" rx="4" class="pad"/><text x="500" y="395" text-anchor="end" class="pin-text">GP5</text>
+    <rect x="518" y="409" width="35" height="24" rx="4" class="pad"/><text x="500" y="427" text-anchor="end" class="pin-text">GP6</text>
+    <rect x="518" y="441" width="35" height="24" rx="4" class="pad"/><text x="500" y="459" text-anchor="end" class="pin-text">GP7</text>
+  </g>
+
+  <!-- Target connector. -->
+  <rect x="848" y="202" width="228" height="236" rx="18" class="target"/>
+  <text x="962" y="245" text-anchor="middle" class="target-title">Zielgerät</text>
+  <text x="962" y="271" text-anchor="middle" class="small">e.g. router, MCU, embedded device</text>
+  <rect x="882" y="299" width="160" height="36" rx="6" fill="#e7f7ed" stroke="#4f9c6e" stroke-width="2"/>
+  <text x="962" y="323" text-anchor="middle" class="label" fill="#126c38">RX  ← empfängt</text>
+  <rect x="882" y="349" width="160" height="36" rx="6" fill="#fff0e5" stroke="#cf7445" stroke-width="2"/>
+  <text x="962" y="373" text-anchor="middle" class="label" fill="#a34618">TX  → sendet</text>
+  <rect x="882" y="399" width="160" height="36" rx="6" fill="#eef1f5" stroke="#758194" stroke-width="2"/>
+  <text x="962" y="423" text-anchor="middle" class="label">GND</text>
+
+  <!-- Crossed UART connections. -->
+  <path d="M 553 229 C 655 229, 696 317, 882 317" class="wire" stroke="#d36c1e"/>
+  <path d="M 553 261 C 655 261, 706 367, 882 367" class="wire" stroke="#18854d"/>
+  <path d="M 179 261 L 128 261 L 128 681 L 810 681 L 810 417 L 882 417" class="wire" stroke="#566274"/>
+
+  <!-- Connection labels and safety callout. -->
+  <rect x="586" y="155" width="202" height="58" class="callout"/>
+  <text x="687" y="180" text-anchor="middle" class="label" fill="#a34618">GP0 (TX) → RX</text>
+  <text x="687" y="201" text-anchor="middle" class="small">Daten vom Computer zum Zielgerät</text>
+  <rect x="594" y="454" width="202" height="58" class="callout"/>
+  <text x="695" y="479" text-anchor="middle" class="label" fill="#126c38">GP1 (RX) ← TX</text>
+  <text x="695" y="500" text-anchor="middle" class="small">Daten vom Zielgerät zum Computer</text>
+
+  <rect x="175" y="710" width="900" height="45" rx="10" fill="#fff5df" stroke="#d99a29" stroke-width="2"/>
+  <text x="625" y="739" text-anchor="middle" class="label" fill="#754300">Wichtig: Nur 3,3-V-TTL anschließen. Kein RS-232 und keine 5-V-UART-Pegel ohne Pegelwandler.</text>
+</svg>

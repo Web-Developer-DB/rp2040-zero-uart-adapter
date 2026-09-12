@@ -1,0 +1,55 @@
+name: Build RP2040 firmware
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install ARM build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake ninja-build gcc-arm-none-eabi libnewlib-arm-none-eabi
+
+      - name: Fetch Pico SDK
+        run: |
+          git clone --depth 1 --branch 2.2.0 --recurse-submodules \
+            https://github.com/raspberrypi/pico-sdk.git "$RUNNER_TEMP/pico-sdk"
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DPICO_SDK_PATH="$RUNNER_TEMP/pico-sdk" \
+            -DPICO_BOARD=waveshare_rp2040_zero
+
+      - name: Build UF2
+        run: cmake --build build
+
+      - name: Upload UF2
+        uses: actions/upload-artifact@v4
+        with:
+          name: rp2040-zero-uart-adapter
+          path: build/rp2040_zero_uart_adapter.uf2
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" build/rp2040_zero_uart_adapter.uf2 --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" build/rp2040_zero_uart_adapter.uf2 \
+              --title "$GITHUB_REF_NAME" --generate-notes
+          fi
