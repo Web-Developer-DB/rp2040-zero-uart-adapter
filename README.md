@@ -115,6 +115,27 @@ and a readable rendering with timestamps. The current local date and time,
 including seconds, are appended automatically to every filename, so earlier
 captures are not overwritten. Start it first, then power-cycle the target:
 
+### Ubuntu quick capture — three steps
+
+1. Connect the UART data port and run this command. With the standard
+   CircuitPython setup, the data port is usually `/dev/ttyACM1`:
+
+   ~~~sh
+   sudo python3 tools/capture_uart.py /dev/ttyACM1
+   ~~~
+
+2. Wait for `Power-cycle the target now`, then turn the target device off and
+   on.
+3. When the boot is finished, press <kbd>Ctrl</kbd>+<kbd>C</kbd>. This saves
+   both files; it does **not** discard the recording.
+
+The command already uses 115200 baud and saves timestamped files in
+`captures/`. When started with `sudo`, the script returns new files to the
+desktop user automatically.
+
+<details>
+<summary>Advanced: another port or permanent access without sudo</summary>
+
 ### Ubuntu / Linux: quick start and permanent access
 
 If the port reports `Permission denied`, the quickest copy-and-paste option is:
@@ -145,8 +166,7 @@ for port checks.
 python3 tools/capture_uart.py /dev/serial/by-id/<your-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
 ~~~
 
-Stop with <kbd>Ctrl</kbd>+<kbd>C</kbd>. This ends the recorder cleanly and
-saves both files; it does **not** discard the recording.
+</details>
 
 | File | Contents |
 | --- | --- |
@@ -308,6 +328,27 @@ automatisch das lokale Datum und die Uhrzeit einschließlich Sekunden angehängt
 dadurch werden frühere Aufzeichnungen nicht überschrieben. Erst die
 Aufzeichnung starten, danach das Zielgerät einschalten oder neu starten:
 
+### Ubuntu-Schnellaufzeichnung — drei Schritte
+
+1. Den UART-Datenport verbinden und diesen Befehl starten. Bei der normalen
+   CircuitPython-Einrichtung ist der Datenport meist `/dev/ttyACM1`:
+
+   ~~~sh
+   sudo python3 tools/capture_uart.py /dev/ttyACM1
+   ~~~
+
+2. Auf die Meldung `Power-cycle the target now` warten und dann das Zielgerät
+   aus- und wieder einschalten.
+3. Nach dem Bootvorgang <kbd>Ctrl</kbd>+<kbd>C</kbd> drücken. Dadurch werden
+   beide Dateien gespeichert; die bisherige Aufnahme geht **nicht** verloren.
+
+Der Befehl nutzt bereits 115200 Baud und speichert zeitgestempelte Dateien in
+`captures/`. Bei einem Start mit `sudo` gibt das Programm die neuen Dateien
+automatisch an den Desktop-Nutzer zurück.
+
+<details>
+<summary>Erweitert: anderer Port oder dauerhafte Nutzung ohne sudo</summary>
+
 ### Ubuntu / Linux: Schnellstart und dauerhafte Freigabe
 
 Bei der Meldung `Permission denied` funktioniert diese direkt kopierbare
@@ -341,9 +382,7 @@ ausführlichen [Fehlerhilfe](docs/troubleshooting.md).
 python3 tools/capture_uart.py /dev/serial/by-id/<dein-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
 ~~~
 
-Mit <kbd>Ctrl</kbd>+<kbd>C</kbd> wird die Aufzeichnung sauber beendet und
-beide Dateien werden gespeichert; die bisherige Aufnahme geht **nicht**
-verloren.
+</details>
 
 | Datei | Inhalt |
 | --- | --- |
