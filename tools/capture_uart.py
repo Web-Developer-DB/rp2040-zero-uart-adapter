@@ -69,7 +69,7 @@ def capture_paths(prefix: Path, now: dt.datetime | None = None) -> tuple[Path, P
 
 
 def restore_sudo_caller_ownership(paths: tuple[Path, Path]) -> None:
-    """Give capture files back to the desktop user after a sudo invocation."""
+    """Give the capture directory and files normal user ownership after sudo."""
     sudo_uid = os.environ.get("SUDO_UID")
     sudo_gid = os.environ.get("SUDO_GID")
     if sudo_uid is None or sudo_gid is None:
@@ -81,12 +81,16 @@ def restore_sudo_caller_ownership(paths: tuple[Path, Path]) -> None:
     except ValueError:
         return
 
-    for path in paths:
+    entries = ((paths[0].parent, 0o755), (paths[0], 0o644), (paths[1], 0o644))
+    for path, mode in entries:
+        if not path.exists():
+            continue
         try:
             os.chown(path, uid, gid)
+            os.chmod(path, mode)
         except OSError as error:
             print(
-                f"Warning: could not return ownership of {path} to the sudo caller: "
+                f"Warning: could not set normal ownership and permissions on {path}: "
                 f"{error}",
                 file=sys.stderr,
             )
@@ -121,7 +125,6 @@ def main() -> int:
     args = parser.parse_args()
 
     raw_path, log_path = capture_paths(args.prefix)
-    raw_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
         descriptor = configure_port(args.port, args.baud)
@@ -136,6 +139,11 @@ def main() -> int:
     except (OSError, ValueError) as error:
         print(f"Cannot open {args.port}: {error}", file=sys.stderr)
         return 2
+
+    raw_path.parent.mkdir(parents=True, exist_ok=True, mode=0o755)
+    # Fix the directory before creating output, including directories left by
+    # an older sudo-based version of the recorder.
+    restore_sudo_caller_ownership((raw_path, log_path))
 
     started_at = time.monotonic()
     header = (
@@ -185,9 +193,13 @@ def main() -> int:
     except KeyboardInterrupt:
         print("\nCapture stopped by user.")
     finally:
-        os.close(descriptor)
+        try:
+            os.close(descriptor)
+        finally:
+            # This also repairs a captures/ directory that was created by an
+            # earlier sudo-based recording.
+            restore_sudo_caller_ownership((raw_path, log_path))
 
-    restore_sudo_caller_ownership((raw_path, log_path))
     print(f"Saved raw data to {raw_path} and readable log to {log_path}.")
     return 0
 
