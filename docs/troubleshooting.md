@@ -35,8 +35,9 @@ groups
 `dialout` muss in der Ausgabe stehen. Danach kann der Recorder ohne `sudo`
 gestartet werden. Für eine sofortige einzelne Aufnahme ist auch ein
 `sudo python3 tools/capture_uart.py ...` möglich: Der Recorder übergibt die
-neu erzeugten `.raw`- und `.log`-Dateien danach automatisch wieder an den
-Desktop-Nutzer, der `sudo` aufgerufen hat.
+neu erzeugten `.raw`- und `.log`-Dateien **sowie den Ordner `captures/`**
+danach automatisch wieder an den Desktop-Nutzer, der `sudo` aufgerufen hat.
+Der Ordner erhält normale Rechte `755`, die Dateien `644`.
 
 Falls eine alte Aufzeichnung aus einer früheren Programmversion durch einen
 `sudo`-Aufruf root-eigen ist, lasse ihre Eigentümerschaft nicht unbesehen

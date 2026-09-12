@@ -130,8 +130,9 @@ captures are not overwritten. Start it first, then power-cycle the target:
    both files; it does **not** discard the recording.
 
 The command already uses 115200 baud and saves timestamped files in
-`captures/`. When started with `sudo`, the script returns new files to the
-desktop user automatically.
+`captures/`. When started with `sudo`, the script returns the `captures/`
+folder and its new files to the desktop user automatically. The folder has
+normal `755` permissions and the files normal `644` permissions.
 
 <details>
 <summary>Advanced: another port or permanent access without sudo</summary>
@@ -145,7 +146,8 @@ sudo python3 tools/capture_uart.py /dev/serial/by-id/<your-uart-bridge-port> --b
 ~~~
 
 When started with `sudo`, the script automatically returns ownership of the
-created `.raw` and `.log` files to the desktop user who invoked `sudo`.
+`captures/` directory and the created `.raw` and `.log` files to the desktop
+user who invoked `sudo`.
 
 For permanent access without `sudo`, Ubuntu users can add their account to the
 USB-serial `dialout` group once. **Log out and log in again** before using the
@@ -343,8 +345,9 @@ Aufzeichnung starten, danach das Zielgerät einschalten oder neu starten:
    beide Dateien gespeichert; die bisherige Aufnahme geht **nicht** verloren.
 
 Der Befehl nutzt bereits 115200 Baud und speichert zeitgestempelte Dateien in
-`captures/`. Bei einem Start mit `sudo` gibt das Programm die neuen Dateien
-automatisch an den Desktop-Nutzer zurück.
+`captures/`. Bei einem Start mit `sudo` gibt das Programm den Ordner
+`captures/` und die neuen Dateien automatisch an den Desktop-Nutzer zurück.
+Der Ordner erhält normale Rechte `755`, die Dateien `644`.
 
 <details>
 <summary>Erweitert: anderer Port oder dauerhafte Nutzung ohne sudo</summary>
@@ -358,9 +361,9 @@ Variante sofort:
 sudo python3 tools/capture_uart.py /dev/serial/by-id/<dein-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
 ~~~
 
-Wenn der Recorder mit `sudo` gestartet wird, gibt er die neu erzeugten Dateien
-`.raw` und `.log` automatisch an den Desktop-Nutzer zurück, der `sudo`
-aufgerufen hat.
+Wenn der Recorder mit `sudo` gestartet wird, gibt er den Ordner `captures/`
+und die neu erzeugten Dateien `.raw` und `.log` automatisch an den
+Desktop-Nutzer zurück, der `sudo` aufgerufen hat.
 
 Für die dauerhafte Nutzung ohne `sudo` kann das eigene Konto unter Ubuntu
 einmalig zur USB-Seriellgruppe `dialout` hinzugefügt werden. Danach
