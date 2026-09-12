@@ -2,8 +2,8 @@
 """Record a boot log from the RP2040-Zero UART bridge on Linux.
 
 Creates two files from the same byte stream:
-  <prefix>.raw  Exact bytes, useful for binary data or later decoding.
-  <prefix>.log  Human-readable chunks with local timestamps.
+  <prefix>-YYYY-MM-DD_HH-MM-SS.raw  Exact bytes, useful for later decoding.
+  <prefix>-YYYY-MM-DD_HH-MM-SS.log  Human-readable chunks with local timestamps.
 """
 
 import argparse
@@ -49,6 +49,25 @@ def timestamp() -> str:
     return dt.datetime.now().astimezone().isoformat(timespec="milliseconds")
 
 
+def capture_paths(prefix: Path, now: dt.datetime | None = None) -> tuple[Path, Path]:
+    """Return timestamped, non-overwriting raw and log paths for one capture."""
+    started = now or dt.datetime.now().astimezone()
+    stem = f"{prefix.name}-{started.strftime('%Y-%m-%d_%H-%M-%S')}"
+    candidate = prefix.parent / stem
+    raw_path = candidate.with_suffix(".raw")
+    log_path = candidate.with_suffix(".log")
+
+    # A second capture in the same second must still preserve the earlier pair.
+    collision = 1
+    while raw_path.exists() or log_path.exists():
+        candidate = prefix.parent / f"{stem}-{collision:02d}"
+        raw_path = candidate.with_suffix(".raw")
+        log_path = candidate.with_suffix(".log")
+        collision += 1
+
+    return raw_path, log_path
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Record data arriving through the RP2040-Zero UART bridge."
@@ -64,7 +83,10 @@ def main() -> int:
         "--prefix",
         type=Path,
         default=Path("captures/uart-boot"),
-        help="Output path without extension (default: captures/uart-boot)",
+        help=(
+            "Output base name; date and time are appended automatically "
+            "(default: captures/uart-boot)"
+        ),
     )
     parser.add_argument(
         "--duration",
@@ -74,8 +96,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    raw_path = args.prefix.with_suffix(".raw")
-    log_path = args.prefix.with_suffix(".log")
+    raw_path, log_path = capture_paths(args.prefix)
     raw_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
