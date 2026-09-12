@@ -4,6 +4,9 @@
 /firmware/*.elf
 /firmware/*.bin
 /firmware/*.hex
+# The tested CircuitPython image is intentionally versioned as the primary
+# installation path. Other generated UF2 files remain ignored.
+!/firmware/adafruit-circuitpython-waveshare_rp2040_zero-en_US-10.3.0.uf2
 
 # Private captures and device-specific analysis
 # UART logs may contain credentials, serial numbers, MAC addresses, or other

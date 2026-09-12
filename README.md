@@ -17,6 +17,33 @@ anyone who needs a transparent 3.3 V UART console for a microcontroller,
 router, single-board computer, or other embedded device. It is **not** an
 RS-232 adapter and must never be connected directly to 5 V TTL or ±RS-232.
 
+## 🚀 Quick start — CircuitPython (primary firmware)
+
+The primary and recommended implementation is CircuitPython. The exact
+tested board firmware is included in
+[`firmware/adafruit-circuitpython-waveshare_rp2040_zero-en_US-10.3.0.uf2`](firmware/adafruit-circuitpython-waveshare_rp2040_zero-en_US-10.3.0.uf2).
+
+1. Hold **BOOT** on the RP2040-Zero and connect it by USB. The `RPI-RP2` drive
+   appears.
+2. Copy the supplied CircuitPython `.uf2` from `firmware/` to `RPI-RP2`.
+3. After the automatic restart, a `CIRCUITPY` drive appears.
+4. Copy [`circuitpython/boot.py`](circuitpython/boot.py) and
+   [`circuitpython/code.py`](circuitpython/code.py) to the **root** of
+   `CIRCUITPY`, replacing the example `code.py` if it exists.
+5. Safely eject or reconnect the board. Its LED is solid blue when the bridge
+   is ready.
+
+```text
+CIRCUITPY/
+├── boot.py
+└── code.py
+```
+
+`boot.py` creates two separate USB serial interfaces. `usb_cdc.console` is the
+CircuitPython REPL and diagnostics port; `usb_cdc.data` is the UART bridge.
+On a typical Linux host they enumerate as two `/dev/ttyACM*` devices; verify
+the port before opening it and use the data interface for UART traffic.
+
 ## ✨ Highlights
 
 | Feature | Benefit |
@@ -24,7 +51,8 @@ RS-232 adapter and must never be connected directly to 5 V TTL or ±RS-232.
 | Dual USB CDC | Debug/REPL and bridge payload are isolated, so diagnostics cannot corrupt UART data |
 | 3.3 V TTL UART | UART0 on `GP0` / `GP1`; default: 115200 baud, 8N1 |
 | Visual status | Solid blue means ready; directional traffic pulses at 4 Hz |
-| Two firmware paths | Pico SDK C++ for releases; CircuitPython for quick modification |
+| Primary firmware | CircuitPython image and ready-to-copy board files included in this repository |
+| Optional C++ path | Pico SDK implementation for users who prefer compiled firmware |
 | Boot capture | Exact bytes and a readable timestamped log, with Python standard library only |
 | Tagged builds | GitHub Actions builds the Pico SDK firmware from version tags |
 
@@ -56,30 +84,10 @@ See the [wiring guide](docs/wiring.md) for pin notes and source material.
 | Green pulse at 4 Hz | Target UART → USB traffic |
 | Yellow pulse at 4 Hz | Traffic recently appeared in both directions |
 
-## 🚀 Flash a release
+## 🧩 Optional: Pico SDK C++ firmware
 
-Download `rp2040_zero_uart_adapter.uf2` from [Releases](../../releases) when
-a release is available.
-
-1. Hold the **BOOT** button on the RP2040-Zero.
-2. Connect USB; a drive named `RPI-RP2` appears.
-3. Copy the `.uf2` file to this drive.
-4. The board restarts and exposes two USB serial ports.
-
-Use **UART bridge** for a terminal or capture tool. **Debug console** is
-reserved for C++ diagnostics or the CircuitPython REPL.
-
-On Linux, use stable names under `/dev/serial/by-id/` rather than
-`/dev/ttyACM0` and `/dev/ttyACM1`, whose numbers can change between boots.
-
-~~~sh
-ls -l /dev/serial/by-id/
-picocom /dev/serial/by-id/<your-uart-bridge-port> -b 115200
-~~~
-
-## 🔧 Build the Pico SDK firmware
-
-Requirements: [Pico SDK](https://github.com/raspberrypi/pico-sdk) including
+The C++ implementation is secondary to CircuitPython. It is for users who
+prefer a compiled Pico SDK firmware. Requirements: [Pico SDK](https://github.com/raspberrypi/pico-sdk) including
 submodules, CMake 3.13+, ARM GNU Toolchain, and Ninja or Make.
 
 ~~~sh
@@ -99,26 +107,6 @@ before pushing a version tag such as `v1.0.0`.
 > [!NOTE]
 > USB VID/PID `CAFE:4002` is a TinyUSB/Pico example development ID. Obtain a
 > legitimate USB ID before shipping a commercial device.
-
-## 🐍 CircuitPython alternative
-
-To adjust pins, baud rate, or LED timing without compiling, flash CircuitPython
-for the Waveshare RP2040-Zero. Then copy both files from
-[circuitpython/](circuitpython/) to the root of the `CIRCUITPY` drive:
-
-~~~text
-CIRCUITPY/
-├── boot.py
-└── code.py
-~~~
-
-`boot.py` enables the second USB CDC interface before USB enumeration.
-`code.py` contains the bridge and adjustable `UART_BAUDRATE` and `LED_PIN`.
-
-| USB CDC interface | Purpose |
-| --- | --- |
-| `usb_cdc.console` | CircuitPython REPL, tracebacks, and diagnostics |
-| `usb_cdc.data` | UART bridge payload only |
 
 ## 📟 Capture a boot log
 
@@ -154,7 +142,7 @@ without a verified backup and recovery path.
 .
 ├── circuitpython/  # Copy-to-board CircuitPython implementation
 ├── docs/           # Wiring and troubleshooting documentation
-├── firmware/       # Release-firmware notes
+├── firmware/       # Primary CircuitPython UF2 and firmware notes
 ├── src/            # Pico SDK / TinyUSB C++ firmware
 ├── tools/          # Host-side capture utility
 └── .github/        # Tagged-build workflow
@@ -185,6 +173,36 @@ alle, die eine transparente 3,3-V-UART-Konsole für Mikrocontroller, Router,
 Single-Board-Computer oder andere Embedded-Geräte benötigen. Es ist **kein**
 RS-232-Adapter und darf niemals direkt an 5-V-TTL- oder ±RS-232-Ports.
 
+## 🚀 Schnellstart — CircuitPython (primäre Firmware)
+
+CircuitPython ist die primäre und empfohlene Umsetzung dieses Projekts. Die
+genau mit dem Projekt getestete Board-Firmware liegt in
+[`firmware/adafruit-circuitpython-waveshare_rp2040_zero-en_US-10.3.0.uf2`](firmware/adafruit-circuitpython-waveshare_rp2040_zero-en_US-10.3.0.uf2).
+
+1. Die Taste **BOOT** am RP2040-Zero gedrückt halten und das Board per USB
+   anschließen. Das Laufwerk `RPI-RP2` erscheint.
+2. Die bereitgestellte CircuitPython-Datei `.uf2` aus `firmware/` auf
+   `RPI-RP2` kopieren.
+3. Nach dem automatischen Neustart erscheint ein Laufwerk `CIRCUITPY`.
+4. [`circuitpython/boot.py`](circuitpython/boot.py) und
+   [`circuitpython/code.py`](circuitpython/code.py) in das **Wurzelverzeichnis**
+   von `CIRCUITPY` kopieren. Eine eventuell vorhandene Beispiel-`code.py`
+   dabei ersetzen.
+5. Das Board sicher auswerfen oder erneut verbinden. Die LED leuchtet
+   dauerhaft blau, sobald die Bridge bereit ist.
+
+```text
+CIRCUITPY/
+├── boot.py
+└── code.py
+```
+
+`boot.py` erzeugt zwei getrennte serielle USB-Schnittstellen.
+`usb_cdc.console` ist die CircuitPython-REPL und Diagnose-Schnittstelle;
+`usb_cdc.data` ist die UART-Bridge. Unter Linux erscheinen typischerweise zwei
+`/dev/ttyACM*`-Geräte. Vor dem Öffnen den richtigen Port prüfen und für UART
+immer die Daten-Schnittstelle verwenden.
+
 ## ✨ Eigenschaften
 
 | Eigenschaft | Nutzen |
@@ -192,7 +210,8 @@ RS-232-Adapter und darf niemals direkt an 5-V-TTL- oder ±RS-232-Ports.
 | Zwei USB-CDC-Ports | Debug/REPL und Bridge-Nutzdaten sind getrennt; Diagnosen verfälschen keine UART-Daten |
 | 3,3-V-TTL-UART | UART0 auf `GP0` / `GP1`; standardmäßig 115200 Baud, 8N1 |
 | Sichtbarer Status | Dauerhaft blau bedeutet bereit; Datenverkehr pulsiert mit 4 Hz |
-| Zwei Firmware-Wege | Pico-SDK-C++ für Releases, CircuitPython für schnelle Anpassungen |
+| Primäre Firmware | CircuitPython-Image und direkt kopierbare Board-Dateien liegen im Repository |
+| Optionale C++-Variante | Pico-SDK-Umsetzung für Nutzer, die kompilierte Firmware bevorzugen |
 | Boot-Aufzeichnung | Unveränderte Bytes und Zeitstempel-Log ohne Zusatzbibliotheken |
 | Versions-Builds | GitHub Actions baut die Pico-SDK-Firmware aus Versions-Tags |
 
@@ -226,30 +245,11 @@ Die [Verdrahtungsanleitung](docs/wiring.md) enthält Pin-Hinweise und Quellen.
 | Grün, 4-Hz-Puls | Datenverkehr Ziel-UART → USB |
 | Gelb, 4-Hz-Puls | Datenverkehr in beide Richtungen erkannt |
 
-## 🚀 Release-Firmware installieren
+## 🧩 Optional: Pico-SDK-C++-Firmware
 
-Wenn eine Version veröffentlicht ist, `rp2040_zero_uart_adapter.uf2` aus
-[Releases](../../releases) herunterladen.
-
-1. Die **BOOT**-Taste am RP2040-Zero gedrückt halten.
-2. Das Board über USB anschließen. Es erscheint ein Laufwerk `RPI-RP2`.
-3. Die `.uf2`-Datei auf dieses Laufwerk kopieren.
-4. Das Board startet neu und zeigt zwei serielle USB-Schnittstellen an.
-
-Für Terminalprogramm und Aufzeichnung **UART bridge** benutzen. **Debug
-console** bleibt für C++-Diagnosen oder die CircuitPython-REPL reserviert.
-
-Unter Linux sind die stabilen Namen unter `/dev/serial/by-id/` besser als
-`/dev/ttyACM0` und `/dev/ttyACM1`, deren Nummerierung sich ändern kann.
-
-~~~sh
-ls -l /dev/serial/by-id/
-picocom /dev/serial/by-id/<dein-uart-bridge-port> -b 115200
-~~~
-
-## 🔧 Pico-SDK-C++-Firmware bauen
-
-Benötigt werden das [Pico SDK](https://github.com/raspberrypi/pico-sdk)
+Die C++-Umsetzung ist gegenüber CircuitPython nachrangig. Sie eignet sich für
+Nutzer, die eine kompilierte Pico-SDK-Firmware bevorzugen. Benötigt werden das
+[Pico SDK](https://github.com/raspberrypi/pico-sdk)
 einschließlich Submodule, CMake 3.13 oder neuer, ARM-GNU-Toolchain sowie Ninja
 oder Make.
 
@@ -271,28 +271,6 @@ Vor dem Push eines Versions-Tags wie `v1.0.0` können Maintainer die öffentlich
 > Die USB-Kennung `CAFE:4002` ist eine Entwicklungs-ID aus TinyUSB-/Pico-
 > Beispielen. Für ein kommerzielles Produkt ist eine korrekt zugeteilte
 > VID/PID erforderlich.
-
-## 🐍 CircuitPython-Variante
-
-Wenn Pins, Baudrate oder LED-Zeiten ohne Kompilieren angepasst werden sollen,
-CircuitPython für den Waveshare RP2040-Zero installieren. Danach beide Dateien
-aus [circuitpython/](circuitpython/) in das Wurzelverzeichnis von
-`CIRCUITPY` kopieren:
-
-~~~text
-CIRCUITPY/
-├── boot.py
-└── code.py
-~~~
-
-`boot.py` aktiviert die zweite USB-CDC-Schnittstelle vor der USB-Anmeldung.
-`code.py` enthält die Bridge und die einstellbaren Werte `UART_BAUDRATE` und
-`LED_PIN`.
-
-| USB-CDC-Schnittstelle | Zweck |
-| --- | --- |
-| `usb_cdc.console` | CircuitPython-REPL, Tracebacks und Diagnosen |
-| `usb_cdc.data` | ausschließliche UART-Nutzdaten |
 
 ## 📟 Boot-Protokoll aufzeichnen
 
@@ -330,7 +308,7 @@ Wiederherstellungsweg vorhanden sind.
 .
 ├── circuitpython/  # direkt kopierbare CircuitPython-Variante
 ├── docs/           # Verdrahtung und Fehlerhilfe
-├── firmware/       # Hinweise zur Release-Firmware
+├── firmware/       # primäre CircuitPython-UF2 und Firmware-Hinweise
 ├── src/            # Pico-SDK-/TinyUSB-C++-Firmware
 ├── tools/          # Aufzeichnungswerkzeug für den Host
 └── .github/        # Build-Workflow für Versions-Tags
