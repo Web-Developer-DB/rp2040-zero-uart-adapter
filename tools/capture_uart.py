@@ -68,6 +68,30 @@ def capture_paths(prefix: Path, now: dt.datetime | None = None) -> tuple[Path, P
     return raw_path, log_path
 
 
+def restore_sudo_caller_ownership(paths: tuple[Path, Path]) -> None:
+    """Give capture files back to the desktop user after a sudo invocation."""
+    sudo_uid = os.environ.get("SUDO_UID")
+    sudo_gid = os.environ.get("SUDO_GID")
+    if sudo_uid is None or sudo_gid is None:
+        return
+
+    try:
+        uid = int(sudo_uid)
+        gid = int(sudo_gid)
+    except ValueError:
+        return
+
+    for path in paths:
+        try:
+            os.chown(path, uid, gid)
+        except OSError as error:
+            print(
+                f"Warning: could not return ownership of {path} to the sudo caller: "
+                f"{error}",
+                file=sys.stderr,
+            )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Record data arriving through the RP2040-Zero UART bridge."
@@ -101,6 +125,14 @@ def main() -> int:
 
     try:
         descriptor = configure_port(args.port, args.baud)
+    except PermissionError:
+        print(
+            f"Cannot open {args.port}: Permission denied. Run this command with "
+            "sudo for an immediate capture, or add your account to dialout with "
+            "`sudo usermod -aG dialout $USER` and then log out and back in.",
+            file=sys.stderr,
+        )
+        return 2
     except (OSError, ValueError) as error:
         print(f"Cannot open {args.port}: {error}", file=sys.stderr)
         return 2
@@ -155,6 +187,7 @@ def main() -> int:
     finally:
         os.close(descriptor)
 
+    restore_sudo_caller_ownership((raw_path, log_path))
     print(f"Saved raw data to {raw_path} and readable log to {log_path}.")
     return 0
 
