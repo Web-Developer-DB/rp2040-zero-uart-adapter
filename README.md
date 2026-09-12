@@ -108,6 +108,40 @@ before pushing a version tag such as `v1.0.0`.
 > USB VID/PID `CAFE:4002` is a TinyUSB/Pico example development ID. Obtain a
 > legitimate USB ID before shipping a commercial device.
 
+## 🖥️ Use the adapter in a terminal
+
+Use the **data** port for terminal traffic. Text received from the target is
+shown in the terminal; keys you press are sent to the target through `GP0`.
+For a safe receive-only console, leave `GP0` disconnected and connect only
+target TX → `GP1` plus GND.
+
+### Linux
+
+For a live serial console, install `picocom` once and open the usual
+CircuitPython data port at 115200 baud:
+
+~~~sh
+sudo apt install picocom
+sudo picocom -b 115200 /dev/ttyACM1
+~~~
+
+Text arriving from the target is displayed immediately. Exit picocom with
+<kbd>Ctrl</kbd>+<kbd>A</kbd>, then <kbd>Ctrl</kbd>+<kbd>X</kbd>.
+
+### Windows
+
+1. Open **Device Manager** → **Ports (COM & LPT)**. Unplug and reconnect the
+   board to identify its two CircuitPython COM ports; select the data port.
+2. In [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/), select
+   **Serial**, enter `COMx`, and set **Speed** to `115200`.
+3. Under **Connection → Serial**, use `8` data bits, `1` stop bit, **None**
+   parity, and **None** flow control.
+4. Select **Open**. Text from the target appears in the PuTTY window; keyboard
+   input is sent to the target. Close the window to end the terminal session.
+
+The [official PuTTY manual](https://www.puttyssh.org/0.85/htmldoc/) documents
+serial connections in more detail.
+
 ## 📟 Capture a boot log
 
 [tools/capture_uart.py](tools/capture_uart.py) records exact incoming bytes
@@ -321,6 +355,43 @@ Vor dem Push eines Versions-Tags wie `v1.0.0` können Maintainer die öffentlich
 > Die USB-Kennung `CAFE:4002` ist eine Entwicklungs-ID aus TinyUSB-/Pico-
 > Beispielen. Für ein kommerzielles Produkt ist eine korrekt zugeteilte
 > VID/PID erforderlich.
+
+## 🖥️ Adapter im Terminal verwenden
+
+Für Terminaldaten die **Daten-Schnittstelle** verwenden. Text vom Zielgerät
+erscheint im Terminal; Tastatureingaben werden über `GP0` an das Zielgerät
+gesendet. Für eine sichere reine Empfangskonsole `GP0` nicht anschließen und
+nur Ziel-TX → `GP1` sowie GND verbinden.
+
+### Linux
+
+Für eine Live-Serienkonsole `picocom` einmal installieren und den bei
+CircuitPython üblichen Datenport mit 115200 Baud öffnen:
+
+~~~sh
+sudo apt install picocom
+sudo picocom -b 115200 /dev/ttyACM1
+~~~
+
+Der Text des Zielgeräts erscheint sofort im Terminal. Picocom mit
+<kbd>Ctrl</kbd>+<kbd>A</kbd>, anschließend <kbd>Ctrl</kbd>+<kbd>X</kbd>
+beenden.
+
+### Windows
+
+1. Den **Geräte-Manager** öffnen → **Anschlüsse (COM & LPT)**. Das Board ab-
+   und wieder anstecken, um seine zwei CircuitPython-COM-Ports zu erkennen;
+   den Datenport auswählen.
+2. In [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/) **Serial**
+   auswählen, `COMx` eintragen und **Speed** auf `115200` setzen.
+3. Unter **Connection → Serial** `8` Datenbits, `1` Stoppbit, Parität
+   **None** und Flow Control **None** einstellen.
+4. **Open** wählen. Der Text des Zielgeräts erscheint im PuTTY-Fenster;
+   Tastatureingaben werden an das Zielgerät gesendet. Zum Beenden das Fenster
+   schließen.
+
+Das [offizielle PuTTY-Handbuch](https://www.puttyssh.org/0.85/htmldoc/)
+beschreibt serielle Verbindungen ausführlicher.
 
 ## 📟 Boot-Protokoll aufzeichnen
 
