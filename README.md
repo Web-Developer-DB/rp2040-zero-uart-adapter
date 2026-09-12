@@ -111,8 +111,9 @@ before pushing a version tag such as `v1.0.0`.
 ## 📟 Capture a boot log
 
 [tools/capture_uart.py](tools/capture_uart.py) records exact incoming bytes
-and a readable rendering with timestamps. Start it first, then power-cycle
-the target:
+and a readable rendering with timestamps. The current local date and time,
+including seconds, are appended automatically to every filename, so earlier
+captures are not overwritten. Start it first, then power-cycle the target:
 
 ~~~sh
 python3 tools/capture_uart.py /dev/serial/by-id/<your-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
@@ -122,8 +123,8 @@ Stop with <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 
 | File | Contents |
 | --- | --- |
-| `captures/uart-boot.raw` | Exact incoming byte stream |
-| `captures/uart-boot.log` | Timestamped readable text rendering |
+| `captures/uart-boot-2026-09-12_15-30-45.raw` | Exact incoming byte stream |
+| `captures/uart-boot-2026-09-12_15-30-45.log` | Timestamped readable text rendering |
 
 ## 🔒 Privacy and safe use
 
@@ -275,8 +276,10 @@ Vor dem Push eines Versions-Tags wie `v1.0.0` können Maintainer die öffentlich
 ## 📟 Boot-Protokoll aufzeichnen
 
 [tools/capture_uart.py](tools/capture_uart.py) schreibt die exakt empfangenen
-Bytes und eine lesbare Version mit Zeitstempeln. Erst die Aufzeichnung starten,
-danach das Zielgerät einschalten oder neu starten:
+Bytes und eine lesbare Version mit Zeitstempeln. An jeden Dateinamen werden
+automatisch das lokale Datum und die Uhrzeit einschließlich Sekunden angehängt;
+dadurch werden frühere Aufzeichnungen nicht überschrieben. Erst die
+Aufzeichnung starten, danach das Zielgerät einschalten oder neu starten:
 
 ~~~sh
 python3 tools/capture_uart.py /dev/serial/by-id/<dein-uart-bridge-port> --baud 115200 --prefix captures/uart-boot
@@ -286,8 +289,8 @@ Mit <kbd>Ctrl</kbd>+<kbd>C</kbd> wird die Aufzeichnung beendet.
 
 | Datei | Inhalt |
 | --- | --- |
-| `captures/uart-boot.raw` | unveränderter Byte-Datenstrom |
-| `captures/uart-boot.log` | lesbare Textdarstellung mit Zeitstempeln |
+| `captures/uart-boot-2026-09-12_15-30-45.raw` | unveränderter Byte-Datenstrom |
+| `captures/uart-boot-2026-09-12_15-30-45.log` | lesbare Textdarstellung mit Zeitstempeln |
 
 ## 🔒 Datenschutz und sichere Nutzung
 
