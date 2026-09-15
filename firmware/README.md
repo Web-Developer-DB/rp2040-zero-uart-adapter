@@ -14,9 +14,17 @@ SHA-256:
 b268f11ca9ce94660c27beaea0b9e71782b60a97dce5cbeecac8702ac6af92a3
 ```
 
-## Optional C++ firmware
+## Files installed on the board
 
-The alternative Pico SDK C++ implementation is built by GitHub Actions.
-Pushing a version tag such as `v1.0.0` creates a GitHub Release and attaches
-`rp2040_zero_uart_adapter.uf2`. Do not create a tag until that firmware has
-been tested on a real board; use the [release checklist](../docs/release-checklist.md).
+After flashing the UF2, copy these two project files to the root of the
+`CIRCUITPY` drive:
+
+```text
+CIRCUITPY/
+├── boot.py
+└── code.py
+```
+
+The [project README](../README.md) explains the complete installation and the
+terminal connection. Use the [release checklist](../docs/release-checklist.md)
+when publishing a new tested CircuitPython image.

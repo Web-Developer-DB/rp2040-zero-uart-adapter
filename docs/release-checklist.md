@@ -1,33 +1,28 @@
-# Release checklist
+# CircuitPython release checklist
 
-Use this short checklist before creating a version tag. It keeps a release
-reproducible, testable, and free of private target-device data.
+Use this short checklist before publishing a new tested CircuitPython image.
 
-## Firmware checks
+## Board test
 
-- [ ] The GitHub Actions build completes without warnings that affect the UF2.
-- [ ] The UF2 starts on a Waveshare RP2040-Zero.
-- [ ] Both USB serial interfaces enumerate with the labels **Debug console**
-  and **UART bridge**.
-- [ ] Blue is solid while idle; orange, green, and yellow activity pulses work
-  in the expected directions.
-- [ ] A 115200-baud loopback or known-good target test passes in both
-  directions.
+- [ ] The CircuitPython UF2 boots on a Waveshare RP2040-Zero.
+- [ ] `boot.py` and `code.py` are copied to the root of `CIRCUITPY`.
+- [ ] Both USB CDC interfaces appear: console/REPL and data.
+- [ ] The LED is solid blue while idle and pulses during traffic.
+- [ ] UART communication works at 115200 baud, 8N1.
+- [ ] The Linux or Windows terminal instructions work with a real target.
+- [ ] The capture tool creates a timestamped `.raw` and `.log` pair.
 
-## Documentation and privacy checks
+## Privacy and documentation
 
-- [ ] Pinout, voltage warning, installation instructions, and README links are
-  current.
-- [ ] No contents from `captures/`, `docs/private/`, or device-specific
-  profiles are staged for commit.
-- [ ] Logs have been reviewed for credentials, serial numbers, MAC addresses,
+- [ ] No files from `captures/`, `docs/private/`, or device-specific profiles
+  are staged for commit.
+- [ ] Logs have been checked for credentials, serial numbers, MAC addresses,
   and other identifying data.
-- [ ] The release notes name tested hardware and any known limitations.
+- [ ] The UF2 filename, version, SHA-256, pinout, and README links are current.
 
 ## Publish
 
-1. Update the version notes as appropriate.
-2. Create and push a tag in the form `vMAJOR.MINOR.PATCH`, for example
-   `v1.0.0`.
-3. The workflow builds the UF2 and publishes it to the corresponding GitHub
-   Release. Verify the release asset after the workflow completes.
+1. Update the firmware filename and SHA-256 in `firmware/README.md`.
+2. Test the exact UF2 and Python files that will be published.
+3. Create a version tag such as `v1.0.0` and attach the tested UF2 to the
+   GitHub release.
