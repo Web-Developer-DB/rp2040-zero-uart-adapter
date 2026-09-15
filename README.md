@@ -14,6 +14,18 @@ Made for makers, embedded developers, repair technicians, and anyone who needs
 a quick UART console for a router, microcontroller, single-board computer, or
 other embedded device.
 
+## Why the RP2040-Zero instead of a classic Arduino?
+
+The RP2040's GPIO and UART use **3.3 V logic**, which matches the 3.3 V TTL
+levels used by many modern embedded targets. Classic Arduino boards such as an
+Uno or Nano commonly use 5 V logic; connecting their UART directly can damage
+a 3.3 V target or the RP2040. A 5 V Arduino therefore needs a level shifter.
+Some Arduino boards are 3.3 V versions, so always check the exact board and
+its voltage levels before wiring it.
+
+The RP2040-Zero also provides native USB and runs the complete bridge from
+CircuitPython, so no compiled firmware toolchain is needed for this project.
+
 > [!WARNING]
 > This is **3.3 V TTL only**. Never connect it directly to 5 V TTL or classic
 > RS-232 (often ±12 V). Use a suitable level shifter or RS-232 transceiver.
@@ -145,6 +157,20 @@ verwenden.
 Geeignet für Maker, Embedded-Entwickler, Reparaturtechniker und alle, die
 schnell eine UART-Konsole für Router, Mikrocontroller, Single-Board-Computer
 oder andere Embedded-Geräte benötigen.
+
+## Warum RP2040-Zero statt eines klassischen Arduino?
+
+Die GPIOs und UARTs des RP2040 arbeiten mit **3,3-V-Logikpegeln**. Das passt
+zu den 3,3-V-TTL-Pegeln vieler moderner Embedded-Zielgeräte. Klassische
+Arduino-Boards wie Uno oder Nano verwenden dagegen häufig 5-V-Logik. Eine
+direkte UART-Verbindung kann dann ein 3,3-V-Zielgerät oder den RP2040
+beschädigen; bei einem 5-V-Arduino ist ein Pegelwandler erforderlich.
+Es gibt auch Arduino-Boards mit 3,3 V. Deshalb vor dem Verdrahten immer das
+genaue Board und seine Pegel prüfen.
+
+Der RP2040-Zero bietet außerdem natives USB und führt die komplette Bridge mit
+CircuitPython aus. Für dieses Projekt ist daher keine kompilierte
+Firmware-Toolchain nötig.
 
 > [!WARNING]
 > Nur **3,3-V-TTL** anschließen. Niemals direkt 5-V-TTL oder klassisches
